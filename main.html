@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+    background-color: #2b2b2b;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+}
+</style>
+</head>
+<body>
+
+<h2>파일 변경 감지</h2>
+
+<p id="status">텍스트 파일의 변경을 감지합니다...</p>
+<pre id="content"></pre>
+
+<script>
+let url = "https://cors-anywhere.herokuapp.com/https://heroes.dn.nexoncdn.co.kr/ko-KR/Patch_Full/UpToDateInfo.txt";
+let previousContent = localStorage.getItem('previousContent');
+
+setInterval(() => {
+    fetch(url)
+        .then(response => response.text())
+        .then(data => {
+            if (previousContent && data !== previousContent) {
+                document.getElementById("status").innerHTML = "파일이 변경되었습니다.";
+            }
+            previousContent = data;
+            localStorage.setItem('previousContent', data);
+            document.getElementById("content").textContent = data;
+        });
+}, 10000); // 10초마다 체크
+</script>
+
+</body>
+</html>
